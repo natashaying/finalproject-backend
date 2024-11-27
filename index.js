@@ -1,10 +1,10 @@
-const express = require("express")
-const cors = require("cors")
+const express = require("express");
+const cors = require("cors");
 const fs = require("node:fs");
 const jwt =  require("jsonwebtoken");
 
 const SECRET_KEY = "CLAVE ULTRA SECRETA";
-const app = express()
+const app = express();
 const port = 3000;
 
 // Middleware para CORS y parseo de JSON
@@ -52,34 +52,34 @@ const authMiddleware = (req, res, next) => {
 app.use("/emercado-api", authMiddleware);
 
 // Rutas para la API
-app.get("/emercado-api/cart/buy", (req, res) => {
+app.get("/emercado-api/cart/buy", authMiddleware, (req, res) => {
   readJsonFile("json/cart/buy.json", res);
 });
 
-app.get("/emercado-api/cats/cat", (req, res) => {
+app.get("/emercado-api/cats/cat", authMiddleware, (req, res) => {
   readJsonFile("json/cats/cat.json", res);
 });
 
-app.get("/emercado-api/cats_products/:catId", (req, res) => {
+app.get("/emercado-api/cats_products/:catId", authMiddleware, (req, res) => {
   const catId = req.params.catId;
   readJsonFile(`json/cats_products/${catId}.json`, res);
 });
 
-app.get("/emercado-api/products/:productId", (req, res) => {
+app.get("/emercado-api/products/:productId", authMiddleware, (req, res) => {
   const productId = req.params.productId;
   readJsonFile(`json/products/${productId}.json`, res);
 });
 
-app.get("/emercado-api/products_comments/:productId", (req, res) => {
+app.get("/emercado-api/products_comments/:productId", authMiddleware, (req, res) => {
   const productId = req.params.productId;
   readJsonFile(`json/products_comments/${productId}.json`, res);
 });
 
-app.get("/emercado-api/sell/publish", (req, res) => {
+app.get("/emercado-api/sell/publish", authMiddleware, (req, res) => {
   readJsonFile("json/sell/publish.json", res);
 });
 
-app.get("/emercado-api/user_cart/", (req, res) => {
+app.get("/emercado-api/user_cart/", authMiddleware, (req, res) => {
   readJsonFile("json/user_cart/25801.json", res);
 });
 
