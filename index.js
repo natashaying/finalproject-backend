@@ -25,12 +25,11 @@ const readJsonFile = (path, res) => {
 // Endpoint para autenticar usuarios y generar token
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
-  if (username === "admin" && password === "admin") {
-    const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: "1h" });
-    res.status(200).json({ token });
-  } else {
-    res.status(401).json({ message: "Usuario y/o contraseña incorrecto" });
+  if (!username || !password) {
+    return res.status(400).json({ message: "Usuario y/o contraseña no pueden estar vacíos" });
   }
+  const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: "1h" });
+  res.status(200).json({ token });
 });
 
 // Middleware para proteger rutas
