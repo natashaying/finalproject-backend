@@ -11,7 +11,7 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-// Funcion para leer archivos JSON
+// Función para leer archivos JSON
 const readJsonFile = (path, res) => {
   fs.readFile(path, "utf-8", (err, data) => {
     if (err) {
@@ -24,12 +24,22 @@ const readJsonFile = (path, res) => {
 
 // Endpoint para autenticar usuarios y generar token
 app.post("/login", (req, res) => {
-  const { usuario, contrasena } = req.body; 
+  const { usuario, contrasena } = req.body;
+
+  // Verificar si las credenciales están presentes
   if (!usuario || !contrasena) {
     return res.status(400).json({ message: "Usuario y/o contraseña no pueden estar vacíos" });
   }
-  const token = jwt.sign({ usuario }, SECRET_KEY, { expiresIn: "1h" }); 
-  res.status(200).json({ token });
+
+  // Aquí deberías validar el usuario y contraseña con una base de datos real
+  // Por ahora asumimos que las credenciales son correctas
+  if (usuario === "usuario@ejemplo.com" && contrasena === "password123") {
+    // Generar el token
+    const token = jwt.sign({ usuario }, SECRET_KEY, { expiresIn: "1h" });
+    return res.status(200).json({ token });
+  }
+
+  return res.status(401).json({ message: "Credenciales inválidas" });
 });
 
 // Middleware para proteger rutas
