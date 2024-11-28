@@ -1,9 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const fs = require("node:fs");
-const jwt =  require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 
-const SECRET_KEY = "CLAVE ULTRA SECRETA";
+const SECRET_KEY = "CLAVE_ULTRA_SECRETA";
 const app = express();
 const port = 3000;
 
@@ -24,11 +24,11 @@ const readJsonFile = (path, res) => {
 
 // Endpoint para autenticar usuarios y generar token
 app.post("/login", (req, res) => {
-  const { username, password } = req.body;
-  if (!username || !password) {
+  const { usuario, contrasena } = req.body; 
+  if (!usuario || !contrasena) {
     return res.status(400).json({ message: "Usuario y/o contraseña no pueden estar vacíos" });
   }
-  const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: "1h" });
+  const token = jwt.sign({ usuario }, SECRET_KEY, { expiresIn: "1h" }); 
   res.status(200).json({ token });
 });
 
@@ -36,7 +36,7 @@ app.post("/login", (req, res) => {
 const authMiddleware = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Token no proporcionado o inválido" });
+    return res.status(401).json({ message: "Debe iniciar sesión" });
   }
   const token = authHeader.split(" ")[1];
   try {
@@ -44,7 +44,7 @@ const authMiddleware = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (err) {
-    res.status(401).json({ message: "Token invalido o expirado" });
+    return res.status(401).json({ message: "Token inválido o expirado" });
   }
 };
 
@@ -52,34 +52,34 @@ const authMiddleware = (req, res, next) => {
 app.use("/emercado-api", authMiddleware);
 
 // Rutas para la API
-app.get("/emercado-api/cart/buy", authMiddleware, (req, res) => {
+app.get("/emercado-api/cart/buy", (req, res) => {
   readJsonFile("json/cart/buy.json", res);
 });
 
-app.get("/emercado-api/cats/cat", authMiddleware, (req, res) => {
+app.get("/emercado-api/cats/cat", (req, res) => {
   readJsonFile("json/cats/cat.json", res);
 });
 
-app.get("/emercado-api/cats_products/:catId", authMiddleware, (req, res) => {
+app.get("/emercado-api/cats_products/:catId", (req, res) => {
   const catId = req.params.catId;
   readJsonFile(`json/cats_products/${catId}.json`, res);
 });
 
-app.get("/emercado-api/products/:productId", authMiddleware, (req, res) => {
+app.get("/emercado-api/products/:productId", (req, res) => {
   const productId = req.params.productId;
   readJsonFile(`json/products/${productId}.json`, res);
 });
 
-app.get("/emercado-api/products_comments/:productId", authMiddleware, (req, res) => {
+app.get("/emercado-api/products_comments/:productId", (req, res) => {
   const productId = req.params.productId;
   readJsonFile(`json/products_comments/${productId}.json`, res);
 });
 
-app.get("/emercado-api/sell/publish", authMiddleware, (req, res) => {
+app.get("/emercado-api/sell/publish", (req, res) => {
   readJsonFile("json/sell/publish.json", res);
 });
 
-app.get("/emercado-api/user_cart/", authMiddleware, (req, res) => {
+app.get("/emercado-api/user_cart/", (req, res) => {
   readJsonFile("json/user_cart/25801.json", res);
 });
 
