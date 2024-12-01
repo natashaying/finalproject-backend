@@ -1,0 +1,16 @@
+[
+  {
+    "user": "usuario@ejemplo.com",
+    "cartItems": [
+      {
+        "image": "img/prod50741_1.jpg",
+        "id": "50741",
+        "name": "Oso de peluche",
+        "count": 1,
+        "cost": 2400,
+        "currency": "$"
+      }
+    ],
+    "createdAt": "2024-12-01T19:06:46.621Z"
+  }
+]
