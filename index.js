@@ -1,4 +1,3 @@
-// Importar las dependencias necesarias
 const express = require("express");
 const fs = require("node:fs");
 const cors = require("cors");
@@ -12,7 +11,7 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-// Función para leer archivos JSON (útil para recuperar datos de archivos)
+// Función para leer archivos JSON 
 const readJsonFile = (path, res) => {
   fs.readFile(path, "utf-8", (err, data) => {
     if (err) {
@@ -32,7 +31,7 @@ app.post("/login", (req, res) => {
     return res.status(400).json({ message: "Usuario y/o contraseña no pueden estar vacíos" });
   }
 
-  // Aquí validamos las credenciales. Este es solo un ejemplo y debe ser mejorado con una base de datos real
+  // Acá validamos las credenciales.
   if (usuario === "usuario@ejemplo.com" && contrasena === "password123") {
     // Generamos el token JWT
     const token = jwt.sign({ usuario }, SECRET_KEY, { expiresIn: "1h" });
